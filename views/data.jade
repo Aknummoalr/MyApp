@@ -1,0 +1,17 @@
+// filepath: /D:/TS_4/js/nodeJS/MyApp/views/data.jade
+extends layout
+
+block content
+  h1 Data
+  table
+    tr
+      th id
+      th firstname
+      th lastname
+      th email
+    each row in data
+      tr
+        td= row.id
+        td= row.firstname
+        td= row.lastname
+        td= row.email
