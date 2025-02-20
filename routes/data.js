@@ -46,6 +46,21 @@ router.get('/:ida&:idb', function(req, res, next) {
   });
 });
 
+router.get('/test', function(req, res, next) {
+  const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+  const limit = parseInt(req.query.limit) || 10; // Default to 10 records per page if not provided
+  const offset = (page - 1) * limit;
+
+  const query = 'SELECT * FROM public.usertable ORDER BY id LIMIT $1 OFFSET $2;';
+  client.query(query, [limit, offset], (err, result) => {
+    if (err) {
+      return next(err);
+    }
+    res.render('data', { data: result.rows, page, limit });
+  });
+});
+
+
 //handle get request with string parameters for firstname that starts with character x or conatin x 
 router.get('/:x', function(req, res, next) {
   const x = `%${req.params.x}%`;

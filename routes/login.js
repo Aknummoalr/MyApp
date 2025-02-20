@@ -6,11 +6,17 @@ require('dotenv').config();
 const secretkey = process.env.SECRET_KEY;
 
 router.post("/", function(req, res, next) {
-    const { id, username, email } = req.body;
+    const { id, firstname, email } = req.body;
     const Numberid = Number(id);  //get the id and other data 
+    const trimmedFirstname = firstname.trim();
+    const trimmedEmail = email.trim(); 
+    console.log('Request body:', req.body);
 
-    const query = `SELECT * FROM public.usertable WHERE id = $1 AND firstname = $2 AND email = $3`; // Query to check
-    client.query(query, [Numberid, username, email], (err, result) => { 
+    console.log("ID:", id);
+    console.log("Firstname:", trimmedFirstname);
+    console.log("Email:", trimmedEmail);
+    const query = `SELECT * FROM public.usertable WHERE "id" = $1 AND "firstname" ILIKE $2 AND "email" ILIKE $3;`; // Query to check
+    client.query(query, [Numberid, trimmedFirstname, trimmedEmail], (err, result) => { 
         if (err) {
             return next(err);
         }
@@ -19,7 +25,7 @@ router.post("/", function(req, res, next) {
         }
         if(result.rows.length > 0){
             const user = result.rows[0];
-            const token = jwt.sign({ id: Numberid, username: username, email: email }, secretkey, { expiresIn: '300s' },(err, token) => {
+            const token = jwt.sign({ id: Numberid, firstname: trimmedFirstname, email: trimmedEmail }, secretkey, { expiresIn: '1h' },(err, token) => {
                 if (err) {
                     return next(err);
                 }
