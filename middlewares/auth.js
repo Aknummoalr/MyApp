@@ -14,6 +14,7 @@ function authenticateToken(req,res,next){
             return res.status(403).json({message: 'Unauthorized, Invalid token'});
         }
         req.user = user;
+        console.log(req.user);
         next();
     });
 }

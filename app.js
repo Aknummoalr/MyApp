@@ -10,7 +10,7 @@ var usersRouter = require('./routes/users');
 var dataRouter = require('./routes/data'); // Import the data route
 var loginRouter = require('./routes/login');
 var uploadRouter = require('./routes/upload'); // Import the upload route for multer file upload
-
+var sendmailRouter = require('./utils/sendEmail'); // Import the send email route
 var app = express();
 
 // view engine setup
@@ -28,12 +28,14 @@ app.use('/users', usersRouter);
 app.use('/database', dataRouter); // Use the data route
 app.use('/login', loginRouter); // Use the login route
 app.use('/upload',uploadRouter); // Use the upload route for multer file upload
+app.use('/sendemail',sendmailRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function(err, req, res, next) {
